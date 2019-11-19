@@ -57,18 +57,7 @@ begin
 
   sl:= nil;
   try
-    ListBox_Styles.Items.Add(WindowsStyleName);
-    ListBox_Styles.Items.Add(csseparator);
-    //for i:= low(TStyleManager.StyleNames) to high(TStyleManager.StyleNames) do
-    //  if TStyleManager.Style[TStyleManager.StyleNames[i]].IsSystemStyle then
-    //    Listbox_Styles.Items.Add(TStyleManager.StyleNames[i]);
-
-    sl:= TStringList.Create;
-    sl.Sorted:= false;
-    for i:= low(TStyleManager.StyleNames) to high(TStyleManager.StyleNames) do
-      if lowercase(trim(TStyleManager.StyleNames[i])) <> lowercase(Trim(WindowsStyleName)) then  // if not TStyleManager.Style[TStyleManager.StyleNames[i]].IsSystemStyle then
-        sl.Add(TStyleManager.StyleNames[i]);
-    sl.Sort;
+    sl:= ListStyles;
     for i:= 0 to pred(sl.Count) do
       Listbox_Styles.Items.Add(sl.Strings[i]);
   finally

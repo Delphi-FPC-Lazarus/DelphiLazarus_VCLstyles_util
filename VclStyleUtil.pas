@@ -43,6 +43,13 @@ Winapi.Windows,
   Vcl.ExtCtrls,
   Vcl.Buttons;
 {$ENDIF}
+
+const WindowsStyleName:string='Windows';
+      DefaultStyleName:String='Windows';
+      Stylesseparator='------------';
+
+function ListStyles:TStringList;
+
 function GetStyleBgColor: TColor;
 function GetStyleTextGlypColor: TColor;
 
@@ -56,7 +63,22 @@ implementation
 const
   cimgtag = 9999;
 
-  // --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+
+function ListStyles:TStringList;
+var i:integer;
+begin
+  result:= TStringList.Create;
+  result.Sorted:= false;
+  for i:= low(TStyleManager.StyleNames) to high(TStyleManager.StyleNames) do
+    if lowercase(trim(TStyleManager.StyleNames[i])) <> lowercase(Trim(WindowsStyleName)) then  // if not TStyleManager.Style[TStyleManager.StyleNames[i]].IsSystemStyle then
+      result.Add(TStyleManager.StyleNames[i]);
+  result.Sort;
+  result.Insert(0, WindowsStyleName);
+  result.Insert(1, Stylesseparator);
+end;
+
+// --------------------------------------------------------------------------
 
 function GetStyleBgColor: TColor;
 begin
@@ -174,9 +196,9 @@ procedure StyleChangeGlyphs(AForm: TForm);
 
     // Image (nur wenn Tag gesetzt!)
     if AComp is TImage then
-      if Assigned(TImage(AComp).Picture.Bitmap) then
-        if not TImage(AComp).Picture.Bitmap.Empty then
-          if AComp.Tag = cimgtag then
+      if AComp.Tag = cimgtag then
+        if Assigned(TImage(AComp).Picture.Bitmap) then
+          if not TImage(AComp).Picture.Bitmap.Empty then
             StyleChangeGlyph(TImage(AComp).Picture.Bitmap);
 
     // Recursiver Aufruf für Container
